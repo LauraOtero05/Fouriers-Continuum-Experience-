@@ -4,6 +4,7 @@ pipeline {
     tools {
         maven 'Default Maven'
         jdk 'Default JDK'
+        nodejs 'Default NodeJS'
     }
 
     stages {
