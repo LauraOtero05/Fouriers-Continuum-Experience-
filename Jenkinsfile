@@ -33,17 +33,21 @@ pipeline {
 
         stage('Build Frontend') {
             steps {
-                dir('Front-End') {
-                    sh 'npm install'
-                    sh 'npm run build'
+                dir('frontend') {
+                    nodejs(nodeJSInstallationName: 'Default NodeJS') {
+                        sh 'npm install'
+                        sh 'npm run build'
+                    }
                 }
             }
         }
-
+        
         stage('Test Frontend') {
             steps {
-                dir('Front-End') {
-                    sh 'npm test || true'
+                dir('frontend') {
+                    nodejs(nodeJSInstallationName: 'Default NodeJS') {
+                        sh 'npm test || true'
+                    }
                 }
             }
         }
