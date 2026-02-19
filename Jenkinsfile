@@ -8,7 +8,7 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('SCM') {
             steps {
                 checkout scm
             }
@@ -49,24 +49,13 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh 'sonar-scanner'
+                script {
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('sonarqube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
                 }
             }
         }
     }
-}
-
-
-node {
-  stage('SCM') {
-    checkout scm
-  }
-  
-  stage('SonarQube Analysis') {
-    def scannerHome = tool 'SonarScanner';
-    withSonarQubeEnv('sonarqube') {
-      sh "${scannerHome}/bin/sonar-scanner"
-    }
-  }
 }
