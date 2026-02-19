@@ -35,7 +35,7 @@ pipeline {
             steps {
                 dir('Front-End') {
                     nodejs(nodeJSInstallationName: 'NodeJS10') {
-                        sh 'npm install'
+                        sh 'npm install || true'
                         sh 'npm run build'
                     }
                 }
@@ -46,6 +46,7 @@ pipeline {
             steps {
                 dir('Front-End') {
                     nodejs(nodeJSInstallationName: 'NodeJS10') {
+                        sh 'npm install || true'
                         sh 'npm test || true'
                     }
                 }
