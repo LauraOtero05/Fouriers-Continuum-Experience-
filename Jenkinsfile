@@ -4,7 +4,7 @@ pipeline {
     tools {
         maven 'Default Maven'
         jdk 'Default JDK'
-        nodejs 'Default NodeJS'
+        nodejs 'NodeJS12'
     }
 
     stages {
@@ -34,7 +34,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    nodejs(nodeJSInstallationName: 'Default NodeJS') {
+                    nodejs(nodeJSInstallationName: 'NodeJS12') {
                         sh 'npm install'
                         sh 'npm run build'
                     }
@@ -45,7 +45,7 @@ pipeline {
         stage('Test Frontend') {
             steps {
                 dir('Front-End') {
-                    nodejs(nodeJSInstallationName: 'Default NodeJS') {
+                    nodejs(nodeJSInstallationName: 'NodeJS12') {
                         sh 'npm test || true'
                     }
                 }
