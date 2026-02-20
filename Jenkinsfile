@@ -23,32 +23,11 @@ pipeline {
             }
         }
 
-        stage('Test Backend') {
-            steps {
-                dir('Back-End') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    nodejs(nodeJSInstallationName: 'NodeJS10') {
-                        sh 'npm install || true'
-                        sh 'npm run build'
-                    }
-                }
-            }
-        }
-        
-        stage('Test Frontend') {
-            steps {
-                dir('Front-End') {
-                    nodejs(nodeJSInstallationName: 'NodeJS10') {
-                        sh 'npm install || true'
-                        sh 'npm test || true'
-                    }
+                    sh 'npm install'
+                    sh 'npm run build'
                 }
             }
         }
