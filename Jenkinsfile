@@ -28,8 +28,9 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'npm install --ignore-scripts'
-                    sh 'npm run build'
+                    sh 'ng build'
+                    /*sh 'npm install --ignore-scripts'
+                    sh 'npm run build'*/
                 }
             }
         }
