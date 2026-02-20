@@ -28,8 +28,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'npm install'
-                    sh 'npm uninstall puppeteer'
+                    sh 'npm install --ignore-scripts'
                     sh 'npm run build'
                 }
             }
