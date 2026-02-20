@@ -30,7 +30,6 @@ pipeline {
                 dir('Front-End') {
                     sh 'npm install'
                     sh 'npm uninstall puppeteer'
-                    sh 'npm install puppeteer@5.5.0'
                     sh 'npm run build'
                 }
             }
