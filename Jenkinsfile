@@ -23,6 +23,19 @@ pipeline {
             }
         }
 
+        
+
+        stage('Build Frontend') {
+            steps {
+                dir('Front-End') {
+                    sh 'npm install'
+                    sh 'npm uninstall puppeteer'
+                    sh 'npm install puppeteer@5.5.0'
+                    sh 'npm run build'
+                }
+            }
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
@@ -30,15 +43,6 @@ pipeline {
                     withSonarQubeEnv('sonarqube') {
                         sh "${scannerHome}/bin/sonar-scanner"
                     }
-                }
-            }
-        }
-
-        stage('Build Frontend') {
-            steps {
-                dir('Front-End') {
-                    sh 'npm install'
-                    sh 'npm run build'
                 }
             }
         }
