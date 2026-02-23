@@ -5,7 +5,6 @@ pipeline {
         maven 'Default Maven'
         jdk 'Default JDK'
         nodejs 'NodeJS10'
-        nodejs 'NodeJS18'
     }
 
     stages {
