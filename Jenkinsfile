@@ -23,7 +23,7 @@ pipeline {
             }
         }
 
-                stage('Install Frontend') {
+        stage('Install Frontend') {
             steps {
                 dir('Front-End') {
                     sh 'npm install'
@@ -53,6 +53,14 @@ pipeline {
             }
         }
 
+        stage('Compile Backend') {
+            steps {
+                dir('Back-End') {
+                    sh 'mvn clean package'
+                }
+            }
+        }
+
 /*
         stage('Wait for Quality Gate') {
             steps {
@@ -62,8 +70,6 @@ pipeline {
             }
         }
 */
-
-
 
         }
     }
