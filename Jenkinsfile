@@ -23,12 +23,11 @@ pipeline {
             }
         }
 
-        
-
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'ng build'
+                    sg 'npm ci'
+                    sh 'ng build --prod'
                     /*sh 'npm install --ignore-scripts'
                     sh 'npm run build'*/
                 }
@@ -53,5 +52,9 @@ pipeline {
                 }
             }
         }
+
+
+
+
+        }
     }
-}
