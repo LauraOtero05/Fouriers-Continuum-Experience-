@@ -63,13 +63,14 @@ pipeline {
 
         stage('Generate Backend Artifact') {
             steps {
-            dir('Back-End') {
+                dir('Back-End') {
                     withCredentials([usernamePassword(credentialsId: 'ID_nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
                     sh """
                         mvn deploy -DskipTests -B \
                         -Dnexus.username=$NEXUS_USER \
                         -Dnexus.password=$NEXUS_PASS
                     """
+                    }
                 }
             }
         }
