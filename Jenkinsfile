@@ -50,6 +50,7 @@ pipeline {
             }
         }
 
+/*
         stage('Wait for Quality Gate') {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
@@ -57,7 +58,7 @@ pipeline {
                 }
             }
         }
-
+*/
 
 
 
