@@ -56,7 +56,7 @@ pipeline {
         stage('Compile Backend') {
             steps {
                 dir('Back-End') {
-                    sh 'mvn clean package'
+                    sh 'mvn clean package -B'
                 }
             }
         }
