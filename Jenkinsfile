@@ -5,6 +5,7 @@ pipeline {
         maven 'Default Maven'
         jdk 'Default JDK'
         nodejs 'NodeJS10'
+        nodejs 'NodeJS18'
     }
 
     stages {
@@ -26,6 +27,7 @@ pipeline {
                 stage('Install Frontend') {
             steps {
                 dir('Front-End') {
+                    sh 'nvm use NodeJS10'
                     sh 'npm install'
                 }
             }
@@ -34,6 +36,7 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
+                    sh 'nvm use NodeJS10'
                     sh 'npm run build -- --prod'
                 }
             }
@@ -41,6 +44,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
+                sh 'nvm use NodeJS18'
                 script {
                     def scannerHome = tool 'SonarScanner'
                     withSonarQubeEnv('sonarqube') {
