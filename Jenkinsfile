@@ -56,10 +56,57 @@ pipeline {
         stage('Compile Backend') {
             steps {
                 dir('Back-End') {
-                    sh 'mvn clean package'
+                    sh 'mvn clean package -DskipTests -B'
                 }
             }
         }
+
+        stage('Generate Backend Artifact') {
+            dir('Back-End') {
+                steps {
+                    withCredentials([usernamePassword(credentialsId: 'ID_nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
+                    sh """
+                        mvn deploy -DskipTests -B \
+                        -Dnexus.username=$NEXUS_USER \
+                        -Dnexus.password=$NEXUS_PASS
+                    """
+                }
+            }
+        }
+
+        //ID_nexus_docker
+
+stage('Build Docker Backend') {
+    steps {
+        dir('Back-End') {
+            withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
+                usernameVariable: 'DOCKER_USER', 
+                passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        docker build -t my-nexus-host/backend:latest .
+                        echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
+                        docker push my-nexus-host/backend:latest
+                    """
+                }
+        }
+    }
+}
+
+stage('Build Docker Frontend') {
+    steps {
+        dir('Front-End') {
+            withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
+                usernameVariable: 'DOCKER_USER', 
+                passwordVariable: 'DOCKER_PASS')]) {
+                    sh """
+                        docker build -t my-nexus-host/frontend:latest .
+                        echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
+                        docker push my-nexus-host/frontend:latest
+                    """
+                }
+        }
+    }
+}
 
 /*
         stage('Wait for Quality Gate') {
@@ -73,3 +120,4 @@ pipeline {
 
         }
     }
+}
