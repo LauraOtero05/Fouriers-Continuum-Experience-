@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        NEXUS_URL = 'http://nexus:5000'
+    }
+
     tools {
         maven 'Default Maven'
         jdk 'Default JDK'
@@ -65,11 +69,11 @@ pipeline {
             steps {
                 dir('Back-End') {
                     withCredentials([usernamePassword(credentialsId: 'ID_nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                    sh """
+                    sh '''
                         mvn deploy -DskipTests -B \
                         -Dnexus.username=$NEXUS_USER \
                         -Dnexus.password=$NEXUS_PASS
-                    """
+                    '''
                     }
                 }
             }
@@ -83,11 +87,11 @@ stage('Build Docker Backend') {
             withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
+                    sh '''
                         docker build -t my-nexus-host/backend:latest .
                         echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
                         docker push my-nexus-host/backend:latest
-                    """
+                    '''
                 }
         }
     }
@@ -99,11 +103,11 @@ stage('Build Docker Frontend') {
             withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
+                    sh '''
                         docker build -t my-nexus-host/frontend:latest .
                         echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
                         docker push my-nexus-host/frontend:latest
-                    """
+                    '''
                 }
         }
     }
