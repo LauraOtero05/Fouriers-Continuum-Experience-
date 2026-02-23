@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        NEXUS_URL = 'http://nexus:5000'
+        NEXUS_URL = 'http://nexus:8081'
     }
 
     tools {
