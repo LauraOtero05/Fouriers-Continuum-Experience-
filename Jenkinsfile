@@ -26,7 +26,6 @@ pipeline {
                 stage('Install Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'nvm use 10'
                     sh 'npm install'
                 }
             }
@@ -35,15 +34,16 @@ pipeline {
         stage('Build Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'nvm use 10'
                     sh 'npm run build -- --prod'
                 }
             }
         }
 
         stage('SonarQube Analysis') {
+            tools {
+                nodejs 'NodeJS18'
+            }
             steps {
-                sh 'nvm use 18'
                 script {
                     def scannerHome = tool 'SonarScanner'
                     withSonarQubeEnv('sonarqube') {
