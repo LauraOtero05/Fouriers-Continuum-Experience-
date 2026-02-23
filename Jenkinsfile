@@ -120,5 +120,5 @@ stage('Build Docker Frontend') {
 */
 
         }
-    }
 }
+
