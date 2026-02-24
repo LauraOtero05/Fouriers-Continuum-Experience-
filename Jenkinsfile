@@ -9,6 +9,7 @@ pipeline {
         maven 'Default Maven'
         jdk 'Default JDK'
         nodejs 'NodeJS10'
+        docker 'FCE Docker'
     }
 
     stages {
@@ -78,6 +79,7 @@ pipeline {
         }
     }
 }
+
         //ID_nexus_docker
 
 stage('Build Docker Backend') {
