@@ -78,21 +78,6 @@ pipeline {
         }
     }
 }
-
-        stage('Generate Backend Artifact') {
-            steps {
-                dir('Back-End') {
-                    withCredentials([usernamePassword(credentialsId: 'ID_nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                    sh '''
-                        mvn deploy -DskipTests -B \
-                        -Dnexus.username=$NEXUS_USER \
-                        -Dnexus.password=$NEXUS_PASS
-                    '''
-                    }
-                }
-            }
-        }
-
         //ID_nexus_docker
 
 stage('Build Docker Backend') {
