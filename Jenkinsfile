@@ -9,7 +9,7 @@ pipeline {
         maven 'Default Maven'
         jdk 'Default JDK'
         nodejs 'NodeJS10'
-        docker 'FCE Docker'
+        dockerTool 'FCE Docker'
     }
 
     stages {
