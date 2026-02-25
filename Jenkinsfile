@@ -66,21 +66,6 @@ pipeline {
             }
         }
 
-        stage('Deploy to Nexus') {
-            steps {
-                dir('Back-End') {
-                    withCredentials([usernamePassword(credentialsId: 'ID_nexus', usernameVariable: 'NEXUS_USER', passwordVariable: 'NEXUS_PASS')]) {
-                        configFileProvider([configFile(fileId: 'maven-settings-nexus', variable: 'MAVEN_SETTINGS')]) {
-                    sh """
-                        mvn clean deploy -DskipTests -s $MAVEN_SETTINGS -B
-                    """
-                }
-            }
-        }
-    }
-}
-
-
         //ID_nexus_docker
 
 stage('Build Docker Backend') {
