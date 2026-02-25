@@ -31,7 +31,7 @@ pipeline {
         stage('Install Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'npm install --ignore-scritps'
+                    sh 'npm install --ignore-scripts'
                 }
             }
         }
