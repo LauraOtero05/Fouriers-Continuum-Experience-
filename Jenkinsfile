@@ -80,13 +80,6 @@ pipeline {
     }
 }
 
-stage('Debug Docker') {
-    steps {
-        sh 'whoami'
-        sh 'which docker || echo "docker no existe"'
-        sh 'docker version || echo "docker no funciona"'
-    }
-}
 
         //ID_nexus_docker
 
