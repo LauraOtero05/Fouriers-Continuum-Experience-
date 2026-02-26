@@ -1,10 +1,6 @@
 pipeline {
     agent any
-
-    environment {
-        NEXUS_URL = 'http://nexus:8081'
-    }
-
+    
     tools {
         maven 'Default Maven'
         jdk 'Default JDK'
@@ -75,9 +71,9 @@ stage('Build Docker Backend') {
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        docker build -t nexus/backend:latest .
-                        echo $DOCKER_PASS | docker login nexus -u $DOCKER_USER --password-stdin
-                        docker push nexus/backend:latest
+                        docker build -t nexus:5000/backend:latest .
+                        echo $DOCKER_PASS | docker login nexus:5000 -u $DOCKER_USER --password-stdin
+                        docker push nexus:5000/backend:latest
                     '''
                 }
         }
@@ -91,9 +87,9 @@ stage('Build Docker Frontend') {
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        docker build -t nexus/frontend:latest .
-                        echo $DOCKER_PASS | docker login nexus -u $DOCKER_USER --password-stdin
-                        docker push nexus/frontend:latest
+                        docker build -t nexus:5000/frontend:latest .
+                        echo $DOCKER_PASS | docker login nexus:5000 -u $DOCKER_USER --password-stdin
+                        docker push nexus:5000/frontend:latest
                     '''
                 }
         }
