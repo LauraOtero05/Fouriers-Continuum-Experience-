@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    
+
     tools {
         maven 'Default Maven'
         jdk 'Default JDK'
@@ -64,6 +64,34 @@ pipeline {
 
         //ID_nexus_docker
 
+stage('Docker Build & Push to Nexus') {
+    steps {
+        script {
+            // Mantenemos tu configuración que ya funciona
+            def nexusRegistry = "host.docker.internal:5000"
+            def backImageName = "${nexusRegistry}/its-backend"
+            def frontImageName = "${nexusRegistry}/its-frontend"
+            
+            withEnv(["NO_PROXY=host.docker.internal,nexus,127.0.0.1,localhost"]) {
+                docker.withRegistry("http://${nexusRegistry}", 'ID_nexus_docker') {
+                    dir('Back-End') {
+                        def backImage = docker.build("${backImageName}:${env.BUILD_NUMBER}")
+                        backImage.push()
+                        backImage.push("latest")
+                    }
+                    
+                    dir('Front-End') {
+                        def frontImage = docker.build("${frontImageName}:${env.BUILD_NUMBER}")
+                        frontImage.push()
+                        frontImage.push("latest")
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
 stage('Build Docker Backend') {
     steps {
         dir('Back-End') {
@@ -94,7 +122,7 @@ stage('Build Docker Frontend') {
                 }
         }
     }
-}
+}*/
 
 /*
         stage('Wait for Quality Gate') {
