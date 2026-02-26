@@ -75,9 +75,9 @@ stage('Build Docker Backend') {
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        docker build -t my-nexus-host/backend:latest .
-                        echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
-                        docker push my-nexus-host/backend:latest
+                        docker build -t nexus/backend:latest .
+                        echo $DOCKER_PASS | docker login nexus -u $DOCKER_USER --password-stdin
+                        docker push nexus/backend:latest
                     '''
                 }
         }
@@ -91,9 +91,9 @@ stage('Build Docker Frontend') {
                 usernameVariable: 'DOCKER_USER', 
                 passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
-                        docker build -t my-nexus-host/frontend:latest .
-                        echo $DOCKER_PASS | docker login my-nexus-host -u $DOCKER_USER --password-stdin
-                        docker push my-nexus-host/frontend:latest
+                        docker build -t nexus/frontend:latest .
+                        echo $DOCKER_PASS | docker login nexus -u $DOCKER_USER --password-stdin
+                        docker push nexus/frontend:latest
                     '''
                 }
         }
