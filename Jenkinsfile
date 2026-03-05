@@ -70,6 +70,25 @@ pipeline {
             }
         }
 
+        stage('Integration Tests - Backend') {
+            steps {
+                dir('Back-End') {
+                    sh 'mvn clean verify'
+                }
+            }
+        }
+
+        stage('Integration Tests - Frontend') {
+            tools {
+                nodejs 'NodeJS18'
+            }
+            steps {
+                dir('Front-End') {
+                    npm run e2e
+                }
+            }
+        }
+
         //ID_nexus_docker
 
         stage('Docker Build & Push to Nexus') {
@@ -96,29 +115,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Integration Tests - Backend') {
-            steps {
-                dir('Back-End') {
-                    sh 'mvn clean verify'
-                }
-            }
-        }
-
-        stage('Integration Tests - Frontend') {
-            tools {
-                nodejs 'NodeJS18'
-            }
-            steps {
-                dir('Front-End') {
-                    sh '''
-                    export CHROME_BIN=/usr/bin/chromium
-                    export CHROME_FLAGS="--no-sandbox --disable-dev-shm-usage --disable-gpu"
-                    npm install
-                    npm run test -- --watch=false --browsers=ChromeHeadless
-                    '''
-                }
-            }
-        }
+        
     }
 }
