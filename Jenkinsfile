@@ -79,9 +79,6 @@ pipeline {
         }
 
         stage('Integration Tests - Frontend') {
-            tools {
-                nodejs 'NodeJS18'
-            }
             steps {
                 dir('Front-End') {
                     sh 'npm run e2e'
