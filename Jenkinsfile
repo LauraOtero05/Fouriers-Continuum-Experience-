@@ -84,7 +84,7 @@ pipeline {
             }
             steps {
                 dir('Front-End') {
-                    npm run e2e
+                    sh 'npm run e2e'
                 }
             }
         }
