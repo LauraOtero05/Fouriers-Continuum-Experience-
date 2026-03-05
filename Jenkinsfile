@@ -62,6 +62,14 @@ pipeline {
             }
         }
 
+        stage('Wait for Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Compile Backend') {
             steps {
                 dir('Back-End') {
@@ -75,11 +83,9 @@ pipeline {
         stage('Docker Build & Push to Nexus') {
             steps {
                 script {
-                    // Mantenemos tu configuración que ya funciona
                     def nexusRegistry = "host.docker.internal:5000"
                     def backImageName = "${nexusRegistry}/its-backend"
                     def frontImageName = "${nexusRegistry}/its-frontend"
-            
                     withEnv(["NO_PROXY=host.docker.internal,nexus,127.0.0.1,localhost"]) {
                         docker.withRegistry("http://${nexusRegistry}", 'ID_nexus_docker') {
                             dir('Back-End') {
@@ -98,7 +104,6 @@ pipeline {
                 }
             }
         }
-
         stage('Integration Tests - Backend') {
             steps {
                 dir('Back-End') {
@@ -115,11 +120,11 @@ pipeline {
                 dir('Front-End') {
                     sh 'npm install'
                     sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
+                dir('Front-End') {
+                    sh 'npm install'
+                    sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
         }
-        
-
-
-        }
+    }
 }
