@@ -114,7 +114,7 @@ pipeline {
 
         stage('Integration Tests - Frontend') {
             tools {
-                nodejs 'Node18'
+                nodejs 'NodeJS18'
             }
             steps {
                 dir('Front-End') {
