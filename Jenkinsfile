@@ -96,6 +96,7 @@ pipeline {
                 }
             }
         }
+
         stage('Integration Tests - Backend') {
             steps {
                 dir('Back-End') {
@@ -112,12 +113,8 @@ pipeline {
                 dir('Front-End') {
                     sh 'npm install'
                     sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
-                dir('Front-End') {
-                    sh 'npm install'
-                    sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
                 }
             }
         }
     }
-}
 }
