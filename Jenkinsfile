@@ -111,10 +111,12 @@ pipeline {
             }
             steps {
                 dir('Front-End') {
+                    sh '''
                     export CHROME_BIN=/usr/bin/chromium
                     export CHROME_FLAGS="--no-sandbox --disable-dev-shm-usage"
-                    sh 'npm install'
-                    sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
+                    npm install
+                    npm run test -- --watch=false --browsers=ChromeHeadless
+                    '''
                 }
             }
         }
