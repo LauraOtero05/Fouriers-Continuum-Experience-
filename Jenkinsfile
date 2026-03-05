@@ -81,7 +81,12 @@ pipeline {
         stage('Integration Tests - Frontend') {
             steps {
                 dir('Front-End') {
-                    sh 'npm run e2e'
+                    sh '''
+                    export CHROME_BIN=/usr/bin/chromium
+                    export NODE_OPTIONS=--openssl-legacy-provider
+                    export CHROME_FLAGS="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu"
+                    npm run e2e
+                    '''
                 }
             }
         }
