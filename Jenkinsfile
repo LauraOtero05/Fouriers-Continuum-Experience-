@@ -83,9 +83,8 @@ pipeline {
                 dir('Front-End') {
                     sh '''
                     export CHROME_BIN=/usr/bin/chromium
-                    export NODE_OPTIONS=--openssl-legacy-provider
                     export CHROME_FLAGS="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu"
-                    npm run e2e
+                    node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng e2e
                     '''
                 }
             }
