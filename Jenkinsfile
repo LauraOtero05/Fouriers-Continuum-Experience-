@@ -54,6 +54,14 @@ pipeline {
             }
         }
 
+        stage('Wait for Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Compile Backend') {
             steps {
                 dir('Back-End') {
@@ -64,76 +72,54 @@ pipeline {
 
         //ID_nexus_docker
 
-stage('Docker Build & Push to Nexus') {
-    steps {
-        script {
-            // Mantenemos tu configuración que ya funciona
-            def nexusRegistry = "host.docker.internal:5000"
-            def backImageName = "${nexusRegistry}/its-backend"
-            def frontImageName = "${nexusRegistry}/its-frontend"
-            
-            withEnv(["NO_PROXY=host.docker.internal,nexus,127.0.0.1,localhost"]) {
-                docker.withRegistry("http://${nexusRegistry}", 'ID_nexus_docker') {
-                    dir('Back-End') {
-                        def backImage = docker.build("${backImageName}:${env.BUILD_NUMBER}")
-                        backImage.push()
-                        backImage.push("latest")
-                    }
-                    
-                    dir('Front-End') {
-                        def frontImage = docker.build("${frontImageName}:${env.BUILD_NUMBER}")
-                        frontImage.push()
-                        frontImage.push("latest")
-                    }
-                }
-            }
-        }
-    }
-}
-
-/*
-stage('Build Docker Backend') {
-    steps {
-        dir('Back-End') {
-            withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
-                usernameVariable: 'DOCKER_USER', 
-                passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
-                        docker build -t nexus:5000/backend:latest .
-                        echo $DOCKER_PASS | docker login nexus:5000 -u $DOCKER_USER --password-stdin
-                        docker push nexus:5000/backend:latest
-                    '''
-                }
-        }
-    }
-}
-
-stage('Build Docker Frontend') {
-    steps {
-        dir('Front-End') {
-            withCredentials([usernamePassword(credentialsId: 'ID_nexus_docker', 
-                usernameVariable: 'DOCKER_USER', 
-                passwordVariable: 'DOCKER_PASS')]) {
-                    sh '''
-                        docker build -t nexus:5000/frontend:latest .
-                        echo $DOCKER_PASS | docker login nexus:5000 -u $DOCKER_USER --password-stdin
-                        docker push nexus:5000/frontend:latest
-                    '''
-                }
-        }
-    }
-}*/
-
-/*
-        stage('Wait for Quality Gate') {
+        stage('Docker Build & Push to Nexus') {
             steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    waitForQualityGate abortPipeline: true
+                script {
+                    // Mantenemos tu configuración que ya funciona
+                    def nexusRegistry = "host.docker.internal:5000"
+                    def backImageName = "${nexusRegistry}/its-backend"
+                    def frontImageName = "${nexusRegistry}/its-frontend"
+            
+                    withEnv(["NO_PROXY=host.docker.internal,nexus,127.0.0.1,localhost"]) {
+                        docker.withRegistry("http://${nexusRegistry}", 'ID_nexus_docker') {
+                            dir('Back-End') {
+                                def backImage = docker.build("${backImageName}:${env.BUILD_NUMBER}")
+                                backImage.push()
+                                backImage.push("latest")
+                            }
+                    
+                            dir('Front-End') {
+                                def frontImage = docker.build("${frontImageName}:${env.BUILD_NUMBER}")
+                                frontImage.push()
+                                frontImage.push("latest")
+                            }
+                        }
+                    }
                 }
             }
         }
-*/
+
+        stage('Integration Tests - Backend') {
+            steps {
+                dir('Back-End') {
+                    sh 'mvn clean verify'
+                }
+            }
+        }
+
+        stage('Integration Tests - Frontend') {
+            tools {
+                nodejs 'Node18'
+            }
+            steps {
+                dir('Front-End') {
+                    sh 'npm install'
+                    sh 'npm run test -- --watch=false --browsers=ChromeHeadless'
+                }
+            }
+        }
+        
+
 
         }
 }
-
