@@ -82,7 +82,9 @@ pipeline {
             steps {
                 dir('Front-End') {
                     sh '''
-                    npm run e2e
+                    export CHROME_BIN=/usr/bin/chromium
+                    npm_config_chromedriver_force_download=true
+                    xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' npm run e2e
                     '''
                 }
             }
