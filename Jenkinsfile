@@ -82,13 +82,15 @@ pipeline {
             steps {
                 dir('Front-End') {
                     sh '''
-                    export CHROME_BIN=/usr/bin/chromium
-                    export CHROME_FLAGS="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu"
-                    node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng e2e
+                    npm run e2e
                     '''
                 }
             }
         }
+
+        // export CHROME_BIN=/usr/bin/chromium
+                    // export CHROME_FLAGS="--headless --no-sandbox --disable-dev-shm-usage --disable-gpu"
+                    // node --openssl-legacy-provider ./node_modules/@angular/cli/bin/ng e2e
 
         //ID_nexus_docker
 
