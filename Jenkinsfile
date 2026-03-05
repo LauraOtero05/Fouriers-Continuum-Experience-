@@ -83,8 +83,9 @@ pipeline {
                 dir('Front-End') {
                     sh '''
                     export CHROME_BIN=/usr/bin/chromium
+                    export CHROME_OPTS="--headless --no-sandbox --disable-gpu --disable-dev-shm-usage"
                     npm_config_chromedriver_force_download=true
-                    xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' npm run e2e
+                    npm run e2e
                     '''
                 }
             }
